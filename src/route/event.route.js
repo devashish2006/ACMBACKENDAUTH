@@ -6,8 +6,11 @@ const {
   updateEvent,
   deleteEvent
 } = require('../controller/event.controller'); // Adjust the path if necessary
+const authenticatedUser = require('../middleware/auth.middleware.js');
+
 
 const router = express.Router();
+router.use(authenticatedUser)
 
 // Route to get all events
 router.get('/', getAllEvents);

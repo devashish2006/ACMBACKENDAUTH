@@ -11,8 +11,8 @@ const registerUser = async (req, res) => {
   }
 
   // Check if the email contains "amc"
-  if (!email.includes('amc')) {
-    return res.status(400).json({ error: 'Email must contain the keyword "amc".' });
+  if (!email.includes('acm')) {
+    return res.status(400).json({ error: 'Email must contain the keyword "acm".' });
   }
 
   try {
@@ -47,7 +47,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Controller for login
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -75,10 +74,18 @@ const loginUser = async (req, res) => {
       username: user.username
     });
 
+    // Set the token in an HTTP-only cookie
+    res.cookie('token', token, {
+      httpOnly: true,  // Ensures the cookie is only accessible by the server
+      secure: process.env.NODE_ENV === 'production', // Only send the cookie over HTTPS in production
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: 'Strict' // Prevents cross-site request forgery
+    });
+
     // Respond with the token and user details
     res.status(200).json({
       message: 'Login successful!',
-      token,
+      token,  // Send the token in the response body as well
       user: {
         id: user._id,
         username: user.username,
@@ -91,5 +98,22 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+
+
+
+const logoutUser = (req, res) => {
+  try {
+    // Clear the token cookie
+    res.clearCookie('token', { httpOnly: true, sameSite: 'Strict' });
+
+    // Respond with a logout success message
+    res.status(200).json({ message: 'Logout successful!' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+module.exports = { registerUser, loginUser, logoutUser };
 

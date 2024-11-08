@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Pre-save middleware to hash the password before saving it (removed)
 
-// Method to compare password for login (removed)
+
+
 
 const User = mongoose.model('User', userSchema);
 
