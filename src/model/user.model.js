@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 // User Schema for Registration and Login
 const userSchema = new mongoose.Schema({
@@ -22,18 +21,11 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Pre-save middleware to hash the password before saving it
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); // Only hash if password is modified
-  this.password = await bcrypt.hash(this.password, 10); // Hash the password with 10 rounds
-  next();
-});
+// Pre-save middleware to hash the password before saving it (removed)
 
-// Method to compare password for login
-userSchema.methods.comparePassword = async function (password) {
-  return bcrypt.compare(password, this.password); // Compare password with the hash
-};
+// Method to compare password for login (removed)
 
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
