@@ -2,6 +2,7 @@ const express = require('express');
 const { connectToDatabase } = require('./src/config/database');
 const dotenv = require('dotenv');
 const userRoutes = require('./src/route/user.route'); // Import your user routes
+const eventRoutes = require('./src/route/event.route'); // Import your user routes
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 
 // Use the userRoutes at the /api prefix
 app.use('/user', userRoutes); // This makes the user routes available under /user
+app.use('/event', eventRoutes); // This makes the event routes available under /user
 
 // Database connection and server start
 connectToDatabase().then(() => {
